@@ -8,6 +8,7 @@ import com.github.danieln96.currency.conversion.api.dao.CurrencyData;
 import com.github.danieln96.currency.conversion.api.dao.Rate;
 import com.github.danieln96.currency.conversion.api.dto.CurrencyAmount;
 import com.github.danieln96.currency.conversion.api.dto.CurrencyCode;
+import com.github.danieln96.currency.conversion.api.exception.NBPClientMissingDataException;
 import com.github.danieln96.currency.conversion.api.exception.SameCurrencyException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,10 @@ public class CurrenciesService {
 
         if (currencyAmount.getCurrencyCode() == destinationCurrencyCode) {
             throw new SameCurrencyException(String.format("Trying to convert to the same currency [%s]", destinationCurrencyCode));
+        }
+
+        if (currencyAmount.getAmount().signum() != 1) {
+            throw new IllegalArgumentException("amount value is not positive");
         }
 
         if (currencyAmount.getCurrencyCode() != CurrencyCode.PLN) {
@@ -61,6 +66,6 @@ public class CurrenciesService {
             return currencyData.getRates().get(0);
         }
 
-        throw new IllegalArgumentException("error while getting Currency Rate");
+        throw new NBPClientMissingDataException("error while getting Currency Rate");
     }
 }

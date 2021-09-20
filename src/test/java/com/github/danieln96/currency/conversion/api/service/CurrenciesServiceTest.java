@@ -9,6 +9,7 @@ import com.github.danieln96.currency.conversion.api.dao.CurrencyData;
 import com.github.danieln96.currency.conversion.api.dao.Rate;
 import com.github.danieln96.currency.conversion.api.dto.CurrencyAmount;
 import com.github.danieln96.currency.conversion.api.dto.CurrencyCode;
+import com.github.danieln96.currency.conversion.api.exception.NBPClientMissingDataException;
 import com.github.danieln96.currency.conversion.api.exception.SameCurrencyException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -98,7 +99,7 @@ public class CurrenciesServiceTest {
                         CurrencyCode.EUR,
                         null));
 
-        Assertions.assertThrows(IllegalArgumentException.class,
+        Assertions.assertThrows(NBPClientMissingDataException.class,
                 () -> currenciesService.convertToOtherCurrency(new CurrencyAmount(CurrencyCode.EUR, BigDecimal.TEN), CurrencyCode.PLN));
     }
 }
